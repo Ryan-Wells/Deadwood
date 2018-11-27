@@ -9,12 +9,16 @@ public class Room {
    Part[] parts;
    Upgrade[] upgrades;
    Player[] actors = new Player[3]; //up to 3 players
+   Take[] takes;
 
    int maxTakes;
-   int takes;
+   int remainingTakes;
 
    //area
-   //implement later
+   int x;
+   int y;
+   int h;
+   int w;
 
    Card roomCard;
 
@@ -24,9 +28,9 @@ public class Room {
 
    //removes a shot token from the room
    void removeShotTokens(int shotsRemoved){
-      takes = takes - shotsRemoved;
+      remainingTakes = remainingTakes - shotsRemoved;
       //below is just in case for testing, not necessary
-      if (takes < 0){
+      if (remainingTakes < 0){
          System.out.println("Too many shots removed!");
       }
    }
@@ -160,11 +164,11 @@ public class Room {
       }
    
       System.out.print("\n  Takes =");
-      if(takes == 0){
+      if(remainingTakes == 0){
          System.out.print("  0");
       }
       else{
-         for(int i = 0; i < takes; i++){
+         for(int i = 0; i < remainingTakes; i++){
             System.out.print("  " + (i+1));
          }
       }

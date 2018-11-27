@@ -274,6 +274,13 @@ public class Player {
             cheatMe();
          }
          
+         //ends the entire game
+         else if(userInput.equals("flip table")){
+            gameSystem.dayNumber = 3;
+            gameSystem.endDay();
+         
+         }
+         
          //end turn
          else if(userInput.equals("end turn")){
             System.out.println("Ending your turn...");
@@ -371,7 +378,7 @@ public class Player {
             System.out.println("Successfully Acted!");
             System.out.println(name + ": '" + currentPart.line + "'\n");
             currentRoom.removeShotTokens(1);
-            System.out.println(currentRoom.takes + " shot tokens remaining here!");
+            System.out.println(currentRoom.remainingTakes + " shot tokens remaining here!");
             //check if player is on or off card for payout
             if(currentPart.onCard){
                System.out.println("  +2 credits for on-the-card role!");
@@ -391,12 +398,12 @@ public class Player {
             if(!currentPart.onCard){
                System.out.println("   +1 dollar for off-the-card role.");
                dollars += 1;
-               System.out.println(currentRoom.takes + " shot tokens remaining here!");
+               System.out.println(currentRoom.remainingTakes + " shot tokens remaining here!");
             }
          }
       
          //check if the scene has been completed
-         if (currentRoom.takes <= 0){
+         if (currentRoom.remainingTakes <= 0){
             System.out.println("  The movie " + currentRoom.roomCard.name + " ($" + currentRoom.roomCard.budget + "M budget) has finished production! Let's pay the actors...");
             
             rollNTimes(currentRoom.roomCard.budget);

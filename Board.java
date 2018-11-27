@@ -20,7 +20,7 @@ public class Board {
             //assign a room a card, decrease the cardIndex as cards are used during the game
             currentBoard[i].roomCard = deck[deckIndex-1];
             currentBoard[i].roomCard.flipped = false;
-            currentBoard[i].takes = currentBoard[i].maxTakes;
+            currentBoard[i].remainingTakes = currentBoard[i].maxTakes;
             for(int j = 0; j < currentBoard[i].roomCard.parts.length; j++){
                currentBoard[i].roomCard.parts[j].isTaken = false;
             }

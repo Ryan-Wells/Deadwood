@@ -1,8 +1,9 @@
 ~~~~~~~~~~DEADWOOD~~~~~~~~~~
 Ryan Wells and Travis Breysse
 
-Code can be compiled by running command 'make' in terminal on linux, and run through Deadwood.java
-It can be run with the command: 'java Deadwood' in the terminal or by using a compiler
+code can be compiled by running command 'make' in terminal on linux
+Code is run through Deadwood.java
+It can be run with the command: 'java Deadwood' in the terminal
 
 
 After the game begins, you will be prompted to enter the number of players, and then the player's names.

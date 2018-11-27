@@ -9,6 +9,13 @@ public class Part {
    boolean isTaken;
    boolean onCard;
 
+   Take[] takes;
+
+   int x;
+   int y;
+   int h;
+   int w;
+
 
    //used to print out information regarding the part.
    public String toString(){

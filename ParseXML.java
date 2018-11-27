@@ -19,7 +19,7 @@ public class ParseXML{
    public Document getDocFromFile(String filename)
         throws ParserConfigurationException{
       {
-
+      
          DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
          DocumentBuilder db = dbf.newDocumentBuilder();
          Document doc = null;
@@ -56,8 +56,15 @@ public class ParseXML{
       Room officeTemp = new Room();
       officeTemp.name = officeName;
    
-      //area
-      //implement later
+      //office area
+      NodeList officeArea = officeElement.getElementsByTagName("area");
+      Node tempNode = officeArea.item(0);
+      Element officeBuilder = (Element) tempNode;
+      officeTemp.x = Integer.parseInt(officeBuilder.getAttribute("x"));
+      officeTemp.y = Integer.parseInt(officeBuilder.getAttribute("y"));
+      officeTemp.h = Integer.parseInt(officeBuilder.getAttribute("h"));
+      officeTemp.w = Integer.parseInt(officeBuilder.getAttribute("w"));
+   
    
       //neighbors
       NodeList officeNeighbors = officeElement.getElementsByTagName("neighbor");
@@ -71,6 +78,7 @@ public class ParseXML{
       }
       officeTemp.neighbors = officeNeighborList;
    
+   
       //upgrades
       NodeList officeUpgrades = officeElement.getElementsByTagName("upgrade");
    
@@ -79,7 +87,7 @@ public class ParseXML{
          upgradeList[k] = new Upgrade();
       }
    
-      //put all upgradse into upgradeList
+      //put all upgrades into upgradeList
       for(int i = 0; i < officeUpgrades.getLength(); i++){
          Element n = (Element) officeUpgrades.item(i);
          upgradeList[i].level = Integer.parseInt(n.getAttribute("level"));
@@ -90,7 +98,8 @@ public class ParseXML{
    
       officeTemp.upgrades = upgradeList;
       Board.currentBoard[Board.currentBoardIndex++] = officeTemp;
- 
+   
+   
       //and special handling for trailer
       //reads data from the node
       Node trailerNode = trailer.item(0);
@@ -100,9 +109,15 @@ public class ParseXML{
    
       Room trailerTemp = new Room();
       trailerTemp.name = trailerName;
-   
-      //area
-      //implement later
+      NodeList trailerArea = trailerElement.getElementsByTagName("area");
+      //trailer area
+
+      tempNode = trailerArea.item(0);
+      Element trailerBuilder = (Element) tempNode;
+      trailerTemp.x = Integer.parseInt(trailerBuilder.getAttribute("x"));
+      trailerTemp.y = Integer.parseInt(trailerBuilder.getAttribute("y"));
+      trailerTemp.h = Integer.parseInt(trailerBuilder.getAttribute("h"));
+      trailerTemp.w = Integer.parseInt(trailerBuilder.getAttribute("w"));
    
       //neighbors
       NodeList trailerNeighbors = trailerElement.getElementsByTagName("neighbor");
@@ -135,9 +150,15 @@ public class ParseXML{
          NodeList neighbors = set.getElementsByTagName("neighbor");
          NodeList takes = set.getElementsByTagName("take");
          NodeList parts = set.getElementsByTagName("part");
+         NodeList setArea = set.getElementsByTagName("area");
       
          //area
-         //implement later
+         tempNode = trailerArea.item(0);
+         Element setBuilder = (Element) tempNode;
+         tempRoom.x = Integer.parseInt(setBuilder.getAttribute("x"));
+         tempRoom.y = Integer.parseInt(setBuilder.getAttribute("y"));
+         tempRoom.h = Integer.parseInt(setBuilder.getAttribute("h"));
+         tempRoom.w = Integer.parseInt(setBuilder.getAttribute("w"));
       
          //neighbors
          String[] tempNeighbors = new String[neighbors.getLength()];
@@ -153,14 +174,26 @@ public class ParseXML{
       
       
          //takes
+         Take[] tempTakes = new Take[takes.getLength()];
          for(int k = 0; k < takes.getLength(); k++){
-         
+            Take tempTake = new Take();
             Element t = (Element) takes.item(k);
             int num = Integer.parseInt(t.getAttribute("number"));
          
-            //area
-            //implement later
+            //takes area
+            NodeList takeArea = t.getElementsByTagName("area");
+            Node takeNode = takeArea.item(0);
+            Element takeBuilder = (Element) takeNode;
+            tempTake.x = Integer.parseInt(takeBuilder.getAttribute("x"));
+            tempTake.y = Integer.parseInt(takeBuilder.getAttribute("y"));
+            tempTake.h = Integer.parseInt(takeBuilder.getAttribute("h"));
+            tempTake.w = Integer.parseInt(takeBuilder.getAttribute("w"));  
+            
+            
+            tempTakes[k] = tempTake;
+            
          }
+         tempRoom.takes = tempTakes;
          tempRoom.maxTakes = takes.getLength();
       
          //parts
@@ -174,14 +207,22 @@ public class ParseXML{
             tempPart.line = n.getElementsByTagName("line").item(0).getTextContent();
             tempPart.onCard = false;
             tempPart.isTaken = false;
+            
+            //part area
+            NodeList partArea = n.getElementsByTagName("area");
+            Node partNode = partArea.item(0);
+            Element partBuilder = (Element) partNode;
+            
+            tempPart.x = Integer.parseInt(partBuilder.getAttribute("x"));
+            tempPart.y = Integer.parseInt(partBuilder.getAttribute("y"));
+            tempPart.h = Integer.parseInt(partBuilder.getAttribute("h"));
+            tempPart.w = Integer.parseInt(partBuilder.getAttribute("w"));
          
-         
+        
             tempParts[j] = tempPart;
-         
-            //area
-            //implement later
-         
+                  
          }
+         
          tempRoom.parts = tempParts;
          Board.currentBoard[Board.currentBoardIndex++] = tempRoom;
       }
@@ -232,7 +273,7 @@ public class ParseXML{
          NodeList children = card.getChildNodes(); 
       
          for(int j = 0; j < children.getLength(); j++){
-
+         
             Node sub = children.item(j);
          
          
@@ -272,7 +313,7 @@ public class ParseXML{
          }
       
          Board.deck[Board.deckIndex++] = tempCard;
-
+      
       }
    }
 }
