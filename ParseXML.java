@@ -14,16 +14,14 @@ import java.util.*;
 
 public class ParseXML{
 
-   // building a document from the XML file
-   // returns a Document object after loading the book.xml file.
+   //building a document from the XML file
+   //returns a Document object after loading the book.xml file.
    public Document getDocFromFile(String filename)
         throws ParserConfigurationException{
       {
-      
          DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
          DocumentBuilder db = dbf.newDocumentBuilder();
          Document doc = null;
-      
          try{
             doc = db.parse(filename);
          }
@@ -32,7 +30,7 @@ public class ParseXML{
             ex.printStackTrace();
          }
          return doc;
-      } // exception handling
+      } 
    }
 
 
@@ -65,7 +63,6 @@ public class ParseXML{
       officeTemp.h = Integer.parseInt(officeBuilder.getAttribute("h"));
       officeTemp.w = Integer.parseInt(officeBuilder.getAttribute("w"));
    
-   
       //neighbors
       NodeList officeNeighbors = officeElement.getElementsByTagName("neighbor");
    
@@ -77,7 +74,6 @@ public class ParseXML{
          officeNeighborList[i] = tempNeighborName;
       }
       officeTemp.neighbors = officeNeighborList;
-   
    
       //upgrades
       NodeList officeUpgrades = officeElement.getElementsByTagName("upgrade");
@@ -93,14 +89,23 @@ public class ParseXML{
          upgradeList[i].level = Integer.parseInt(n.getAttribute("level"));
          upgradeList[i].currency = n.getAttribute("currency");
          upgradeList[i].amount = Integer.parseInt(n.getAttribute("amt"));
-      
+         
+         //upgrade area
+         NodeList upgradeArea = n.getElementsByTagName("area");
+         tempNode = upgradeArea.item(0);
+         Element upgradeBuilder = (Element) tempNode;
+         upgradeList[i].x = Integer.parseInt(upgradeBuilder.getAttribute("x"));
+         upgradeList[i].y = Integer.parseInt(upgradeBuilder.getAttribute("y"));
+         upgradeList[i].h = Integer.parseInt(upgradeBuilder.getAttribute("h"));
+         upgradeList[i].w = Integer.parseInt(upgradeBuilder.getAttribute("w"));   
       }
    
       officeTemp.upgrades = upgradeList;
+      officeTemp.doneShooting = true;
       Board.currentBoard[Board.currentBoardIndex++] = officeTemp;
    
    
-      //and special handling for trailer
+      //special handling for trailer
       //reads data from the node
       Node trailerNode = trailer.item(0);
    
@@ -110,8 +115,8 @@ public class ParseXML{
       Room trailerTemp = new Room();
       trailerTemp.name = trailerName;
       NodeList trailerArea = trailerElement.getElementsByTagName("area");
+      
       //trailer area
-
       tempNode = trailerArea.item(0);
       Element trailerBuilder = (Element) tempNode;
       trailerTemp.x = Integer.parseInt(trailerBuilder.getAttribute("x"));
@@ -129,10 +134,10 @@ public class ParseXML{
          String tempNeighborName = n.getAttribute("name");
          trailerNeighborList[i] = tempNeighborName;
       }
+      trailerTemp.doneShooting = true;
       trailerTemp.neighbors = trailerNeighborList;
    
       Board.currentBoard[Board.currentBoardIndex++] = trailerTemp;
-   
    
       //handles all the sets
       for(int i = 0; i < setList.getLength(); i++){
@@ -153,8 +158,8 @@ public class ParseXML{
          NodeList setArea = set.getElementsByTagName("area");
       
          //area
-         tempNode = trailerArea.item(0);
-         Element setBuilder = (Element) tempNode;
+         tempNode = setArea.item(0);
+         Element setBuilder = (Element) tempNode; 
          tempRoom.x = Integer.parseInt(setBuilder.getAttribute("x"));
          tempRoom.y = Integer.parseInt(setBuilder.getAttribute("y"));
          tempRoom.h = Integer.parseInt(setBuilder.getAttribute("h"));
@@ -164,14 +169,11 @@ public class ParseXML{
          String[] tempNeighbors = new String[neighbors.getLength()];
       
          for(int j = 0; j < neighbors.getLength(); j++){
-         
             Element n = (Element) neighbors.item(j);
             String tempName = n.getAttribute("name");
             tempNeighbors[j] = tempName;
          }
-      
          tempRoom.neighbors = tempNeighbors;
-      
       
          //takes
          Take[] tempTakes = new Take[takes.getLength()];
@@ -189,9 +191,7 @@ public class ParseXML{
             tempTake.h = Integer.parseInt(takeBuilder.getAttribute("h"));
             tempTake.w = Integer.parseInt(takeBuilder.getAttribute("w"));  
             
-            
             tempTakes[k] = tempTake;
-            
          }
          tempRoom.takes = tempTakes;
          tempRoom.maxTakes = takes.getLength();
@@ -218,16 +218,12 @@ public class ParseXML{
             tempPart.h = Integer.parseInt(partBuilder.getAttribute("h"));
             tempPart.w = Integer.parseInt(partBuilder.getAttribute("w"));
          
-        
             tempParts[j] = tempPart;
-                  
          }
-         
          tempRoom.parts = tempParts;
          Board.currentBoard[Board.currentBoardIndex++] = tempRoom;
       }
    }
-
 
    //reads in data from the cards.xml file
    public void readCardData(Document d){
@@ -236,28 +232,21 @@ public class ParseXML{
       int firstOne = 1;
    
       Element root = d.getDocumentElement();
-   
       NodeList deck = root.getElementsByTagName("card");
-   
-   
+      
       for(int i = 0; i < deck.getLength(); i++){
       
          Card tempCard = new Card();
-      
          //reads data from the nodes
          Node card = deck.item(i);
-      
          //card name
          tempCard.name = card.getAttributes().getNamedItem("name").getNodeValue();
-      
          //card image
          tempCard.image = card.getAttributes().getNamedItem("img").getNodeValue();
-      
          //card budget
          tempCard.budget = Integer.parseInt(card.getAttributes().getNamedItem("budget").getNodeValue());
          
-         
-         NodeList partCount = card.getChildNodes();//check edge cases for cards with less than 3 parts
+         NodeList partCount = card.getChildNodes();
          int counter = 0;
          for (int p = 0; p < partCount.getLength(); p++){
             if("part".equals(partCount.item(p).getNodeName())){
@@ -276,44 +265,42 @@ public class ParseXML{
          
             Node sub = children.item(j);
          
-         
             //scenes
             if("scene".equals(sub.getNodeName())){
                //scene number
                tempCard.scene = Integer.parseInt(sub.getAttributes().getNamedItem("number").getNodeValue());
-            
                //scene description
                tempCard.description = sub.getTextContent();
             }
-            
             
             //parts
             else if("part".equals(sub.getNodeName())){
             
                //part name
                tempParts[partsIndex].name = sub.getAttributes().getNamedItem("name").getNodeValue();
-            
                //part level
                tempParts[partsIndex].level = Integer.parseInt(sub.getAttributes().getNamedItem("level").getNodeValue());
-            
-               //part area
-               //implement later
-            
-               //part line
                Element n = (Element) children.item(j);
+               //part line
                tempParts[partsIndex].line = n.getElementsByTagName("line").item(0).getTextContent();
-            
+               
+               //part area for cards
+               NodeList partArea = n.getElementsByTagName("area");
+               Node tempNode = partArea.item(0);
+               Element partBuilder = (Element) tempNode;
+               tempParts[partsIndex].x = Integer.parseInt(partBuilder.getAttribute("x"));
+               tempParts[partsIndex].y = Integer.parseInt(partBuilder.getAttribute("y"));
+               tempParts[partsIndex].h = Integer.parseInt(partBuilder.getAttribute("h"));
+               tempParts[partsIndex].w = Integer.parseInt(partBuilder.getAttribute("w"));
+               
                tempParts[partsIndex].onCard = true;
                tempParts[partsIndex].isTaken = false;
             
                tempCard.parts = tempParts;
                partsIndex++;
-            
             }
          }
-      
          Board.deck[Board.deckIndex++] = tempCard;
-      
       }
    }
 }

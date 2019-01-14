@@ -4,16 +4,16 @@ import org.w3c.dom.Document;
 //main class for the game
 public class Deadwood {
 
+   public static BoardLayersListener boardListener;
+   
    public static void main(String args[]){
 
       extractXMLInfo();
       
       //Runs the game.
       gameSystem.startGame();
-   
    }
    
-
    //extract XML information to store room and card information//
    private static void extractXMLInfo(){
       Document doc = null;
@@ -29,5 +29,4 @@ public class Deadwood {
          System.out.println("Error = "+e);
       }
    }
-
 }

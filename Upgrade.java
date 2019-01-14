@@ -4,11 +4,19 @@ public class Upgrade{
     int level;
     String currency;
     int amount;
+    int x;
+    int y;
+    int h;
+    int w;
 
    //used to print out the upgrade's information
    public String toString(){
-      return "    level = " + level + ",  currency = " + currency + ",  amount = " + amount;
+      if(currency.equals("dollar")){
+         return "rank " + level + ", $" +  amount;
+      }
+      else{
+         return "rank " + level + ", " +  amount + "cr";
+      }
    }
-   
 
 }

@@ -6,9 +6,21 @@ public class Board {
    public static int currentBoardIndex = 0;
    public static int deckIndex = 0;
 
-
    //fills the board with cards.
-   static void populateBoard(){
+   static void populateBoard(BoardLayersListener boardGUI){
+   
+      for(int i = 0; i < Board.currentBoardIndex; i++){
+         if (currentBoard[i].name.equals("trailer") || currentBoard[i].name.equals("office")){
+         //do nothing
+         }
+         else{
+            //remove the cards before laying down new ones
+            if(currentBoard[i].roomCard != null){
+               BoardLayersListener.removeCard(currentBoard[i].roomCard);
+               BoardLayersListener.flipCard(currentBoard[i].roomCard);
+            }
+         }
+      }
    
       //iterate through rooms and assign a card to each room
       for(int i = 0; i < Board.currentBoardIndex; i++){
@@ -20,6 +32,12 @@ public class Board {
             //assign a room a card, decrease the cardIndex as cards are used during the game
             currentBoard[i].roomCard = deck[deckIndex-1];
             currentBoard[i].roomCard.flipped = false;
+            
+            //set the cards and shots on the board GUI
+            boardGUI.setCards(currentBoard[i].roomCard, currentBoard[i]);
+            boardGUI.setCardBacks(currentBoard[i].roomCard, currentBoard[i]);
+            boardGUI.setShots(currentBoard[i]);
+           
             currentBoard[i].remainingTakes = currentBoard[i].maxTakes;
             for(int j = 0; j < currentBoard[i].roomCard.parts.length; j++){
                currentBoard[i].roomCard.parts[j].isTaken = false;
@@ -27,7 +45,6 @@ public class Board {
             for(int k = 0; k < currentBoard[i].parts.length; k++){
                currentBoard[i].parts[k].isTaken = false;
             }
-            
             currentBoard[i].doneShooting = false;
             deckIndex--;
          }

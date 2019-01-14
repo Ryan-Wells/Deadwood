@@ -3,23 +3,22 @@ public class Part {
 
    //xml data
    String name = "null";
-   int level;
    String line;
+
+   int level;
+   int x;
+   int y;
+   int h;
+   int w;
 
    boolean isTaken;
    boolean onCard;
 
    Take[] takes;
 
-   int x;
-   int y;
-   int h;
-   int w;
-
-
    //used to print out information regarding the part.
    public String toString(){
-      return "Part name = " + name + "\n    Part Level = " + level + "\n    Line = '" + line + "'   isTaken = " + isTaken + "  onCard = " + onCard + "\n";
+      return name;
    }
 
 

@@ -6,15 +6,8 @@ Code is run through Deadwood.java
 It can be run with the command: 'java Deadwood' in the terminal
 
 
-After the game begins, you will be prompted to enter the number of players, and then the player's names.
-
-Once done, the first player's turn will begin and they will receive a prompt of what to do.
-
-For instance, you can type 'move' to be given a list of possible destinations. Enter your destination (for example, 'Main Street') to move there.
-
-Other commands exist, such as: 
-'info' (prints all information about the player, and other players)
-'rehearse' (if the player has a role, they receive a rehearsal token)
-'upgrade' (if in the office, the player is provided with a list of upgrade options)
-'cheat' (allows the player to manually set their rank, dollars, credits, rehearsal tokens, their current room, and the number of remaining scences on the board. This is used to test the game. And to cheat.)
+At initialization, you will be prompted to enter the number of players via button prompt.
+After that, the game begins and you will be able to control your player using the various button prompts on the right side of the screen.
+Player information and output is found in the text boxes located under the buttons.
+As the game progresses, the movie cards will be removed from the board. When only one remains, the day is over. All players will be returned to the trailers and the board will be reset. Once the third day ends, the player with the highest score wins.
 
